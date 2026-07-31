@@ -4,6 +4,7 @@ import com.kavinaya.minimessagequeue.dto.MessageResponse;
 import com.kavinaya.minimessagequeue.dto.PublishMessageRequest;
 import com.kavinaya.minimessagequeue.entity.Message;
 import com.kavinaya.minimessagequeue.entity.enums.MessageStatus;
+import com.kavinaya.minimessagequeue.mapper.MessageMapper;
 import com.kavinaya.minimessagequeue.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +28,6 @@ public class MessageService {
 
         Message savedMessage = messageRepository.save(message);
 
-        MessageResponse response = new MessageResponse();
-
-        response.setId(savedMessage.getId());
-        response.setQueueName(savedMessage.getQueueName());
-        response.setMessageBody(savedMessage.getMessageBody());
-        response.setStatus(savedMessage.getStatus());
-        response.setRetryCount(savedMessage.getRetryCount());
-        response.setCreatedAt(savedMessage.getCreatedAt());
-
-        return response;
+        return MessageMapper.toResponse(savedMessage);
     }
 }
