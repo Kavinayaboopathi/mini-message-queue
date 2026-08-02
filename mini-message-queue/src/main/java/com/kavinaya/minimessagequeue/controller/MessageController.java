@@ -24,4 +24,11 @@ public class MessageController {
 
         return messageService.publishMessage(request);
     }
+
+    @GetMapping("/consume/{queueName}")
+    public MessageResponse consumeMessage(
+            @PathVariable String queueName) {
+
+        return messageService.consumeMessage(queueName);
+    }
 }

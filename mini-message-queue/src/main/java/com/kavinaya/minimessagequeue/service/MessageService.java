@@ -4,9 +4,12 @@ import com.kavinaya.minimessagequeue.dto.MessageResponse;
 import com.kavinaya.minimessagequeue.dto.PublishMessageRequest;
 import com.kavinaya.minimessagequeue.entity.Message;
 import com.kavinaya.minimessagequeue.entity.enums.MessageStatus;
+import java.util.NoSuchElementException;
 import com.kavinaya.minimessagequeue.mapper.MessageMapper;
 import com.kavinaya.minimessagequeue.repository.MessageRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
 
 @Service
 public class MessageService {
@@ -29,5 +32,23 @@ public class MessageService {
         Message savedMessage = messageRepository.save(message);
 
         return MessageMapper.toResponse(savedMessage);
+    }
+
+    public MessageResponse consumeMessage(String queueName) {
+
+        Message message = messageRepository
+                .findFirstByQueueNameAndStatusOrderByCreatedAtAsc(
+                        queueName,
+                        MessageStatus.PENDING
+                )
+                .orElseThrow(() ->
+                        new NoSuchElementException("No pending messages found in queue: " + queueName)
+                );
+
+        message.setStatus(MessageStatus.PROCESSING);
+
+        Message updatedMessage = messageRepository.save(message);
+
+        return MessageMapper.toResponse(updatedMessage);
     }
 }
