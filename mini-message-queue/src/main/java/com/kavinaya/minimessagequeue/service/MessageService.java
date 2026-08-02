@@ -51,4 +51,22 @@ public class MessageService {
 
         return MessageMapper.toResponse(updatedMessage);
     }
+
+    public MessageResponse acknowledgeMessage(Long id) {
+
+        Message message = messageRepository.findById(id)
+                .orElseThrow(() ->
+                        new NoSuchElementException("Message not found with id: " + id));
+
+        if (message.getStatus() != MessageStatus.PROCESSING) {
+            throw new IllegalStateException(
+                    "Only PROCESSING messages can be acknowledged");
+        }
+
+        message.setStatus(MessageStatus.SUCCESS);
+
+        Message updatedMessage = messageRepository.save(message);
+
+        return MessageMapper.toResponse(updatedMessage);
+    }
 }

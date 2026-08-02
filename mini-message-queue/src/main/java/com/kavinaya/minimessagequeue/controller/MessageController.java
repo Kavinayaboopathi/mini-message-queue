@@ -31,4 +31,11 @@ public class MessageController {
 
         return messageService.consumeMessage(queueName);
     }
+
+    @PostMapping("/ack/{id}")
+    public MessageResponse acknowledgeMessage(
+            @PathVariable Long id) {
+
+        return messageService.acknowledgeMessage(id);
+    }
 }
