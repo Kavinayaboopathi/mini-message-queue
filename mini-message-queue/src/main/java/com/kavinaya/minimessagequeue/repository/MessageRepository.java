@@ -4,6 +4,7 @@ import com.kavinaya.minimessagequeue.entity.Message;
 import com.kavinaya.minimessagequeue.entity.enums.MessageStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,5 +23,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     );
 
 
+
+    List<Message> findByStatusAndLockedAtBefore(
+            MessageStatus status,
+            LocalDateTime time
+    );
 
 }

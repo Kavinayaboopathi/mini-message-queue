@@ -4,6 +4,8 @@ import com.kavinaya.minimessagequeue.dto.MessageResponse;
 import com.kavinaya.minimessagequeue.dto.PublishMessageRequest;
 import com.kavinaya.minimessagequeue.entity.Message;
 import com.kavinaya.minimessagequeue.entity.enums.MessageStatus;
+
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import com.kavinaya.minimessagequeue.mapper.MessageMapper;
 import com.kavinaya.minimessagequeue.repository.MessageRepository;
@@ -46,6 +48,7 @@ public class MessageService {
                 );
 
         message.setStatus(MessageStatus.PROCESSING);
+        message.setLockedAt(LocalDateTime.now());
 
         Message updatedMessage = messageRepository.save(message);
 
