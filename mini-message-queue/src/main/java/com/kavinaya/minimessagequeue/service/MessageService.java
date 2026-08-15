@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class MessageService {
 
@@ -36,6 +38,7 @@ public class MessageService {
         return MessageMapper.toResponse(savedMessage);
     }
 
+    @Transactional
     public MessageResponse consumeMessage(String queueName) {
 
         Message message = messageRepository
